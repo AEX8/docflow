@@ -21,6 +21,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: docflow_backend
+    env_file:
+      - .env
     environment:
       - DATABASE_URL=postgresql://docflow_user:docflow_password@db:5432/docflow_db
     ports:
