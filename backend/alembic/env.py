@@ -16,7 +16,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# this is the key line - tells Alembic about your models
+# importsnt
 target_metadata = Base.metadata
 
 def get_url():
