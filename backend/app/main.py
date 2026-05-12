@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.models import User, Document, ExtractionSchema, ExtractionResult
-from app.api import auth
+from app.api import auth, documents
 
 app = FastAPI(
     title="DocFlow",
@@ -9,6 +9,7 @@ app = FastAPI(
 )
 
 app.include_router(auth.router)
+app.include_router(documents.router)
 
 @app.get("/health")
 def health_check():
