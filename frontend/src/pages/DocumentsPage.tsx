@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useState, type ChangeEvent } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Layout from '../components/Layout'
 import { listDocuments, uploadDocument, deleteDocument } from '../api/documents'
 import { listSchemas } from '../api/schemas'
 import { runExtraction } from '../api/extraction'
+import type { Document, ExtractionResult } from '../types'
+import type { AxiosError } from 'axios'
 
 export default function DocumentsPage() {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
-  const [uploading, setUploading] = useState(false)
-  const [selectedDoc, setSelectedDoc] = useState(null)
-  const [selectedSchema, setSelectedSchema] = useState('')
-  const [extracting, setExtracting] = useState(false)
-  const [results, setResults] = useState({})
+  const [uploading, setUploading] = useState<boolean>(false)
+  const [selectedDoc, setSelectedDoc] = useState<Document | null>(null)
+  const [selectedSchema, setSelectedSchema] = useState<string>('')
+  const [extracting, setExtracting] = useState<boolean>(false)
+  const [results, setResults] = useState<Record<string, ExtractionResult>>({})
 
   const { data: documents = [], isLoading } = useQuery({
     queryKey: ['documents'],
@@ -25,21 +25,22 @@ export default function DocumentsPage() {
     queryFn: listSchemas
   })
 
-  const handleUpload = async (e) => {
-    const file = e.target.files[0]
+  const handleUpload = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const file = e.target.files?.[0]
     if (!file) return
     setUploading(true)
     try {
       await uploadDocument(file)
       queryClient.invalidateQueries({ queryKey: ['documents'] })
     } catch (err) {
-      alert('Upload failed: ' + (err.response?.data?.detail || err.message))
+      const axiosError = err as AxiosError<{ detail: string }>
+      alert('Upload failed: ' + (axiosError.response?.data?.detail || axiosError.message))
     } finally {
       setUploading(false)
     }
   }
 
-  const handleExtract = async () => {
+  const handleExtract = async (): Promise<void> => {
     if (!selectedDoc || !selectedSchema) return
     setExtracting(true)
     try {
@@ -49,13 +50,14 @@ export default function DocumentsPage() {
       setSelectedDoc(null)
       setSelectedSchema('')
     } catch (err) {
-      alert('Extraction failed: ' + (err.response?.data?.detail || err.message))
+      const axiosError = err as AxiosError<{ detail: string }>
+      alert('Extraction failed: ' + (axiosError.response?.data?.detail || axiosError.message))
     } finally {
       setExtracting(false)
     }
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string): Promise<void> => {
     if (!confirm('Delete this document?')) return
     try {
       await deleteDocument(id)

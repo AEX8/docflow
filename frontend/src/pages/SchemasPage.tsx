@@ -1,40 +1,45 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Layout from '../components/Layout'
 import { listSchemas, createSchema, deleteSchema } from '../api/schemas'
+import type { SchemaField, FieldType } from '../types'
 
-const FIELD_TYPES = ['string', 'number', 'date', 'boolean']
+const FIELD_TYPES: FieldType[] = ['string', 'number', 'date', 'boolean']
 
 export default function SchemasPage() {
   const queryClient = useQueryClient()
-  const [showForm, setShowForm] = useState(false)
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [fields, setFields] = useState([
+  const [showForm, setShowForm] = useState<boolean>(false)
+  const [name, setName] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
+  const [fields, setFields] = useState<SchemaField[]>([
     { name: '', type: 'string', description: '', required: true }
   ])
-  const [saving, setSaving] = useState(false)
+  const [saving, setSaving] = useState<boolean>(false)
 
   const { data: schemas = [], isLoading } = useQuery({
     queryKey: ['schemas'],
     queryFn: listSchemas
   })
 
-  const addField = () => {
+  const addField = (): void => {
     setFields([...fields, { name: '', type: 'string', description: '', required: true }])
   }
 
-  const updateField = (index, key, value) => {
+  const updateField = <K extends keyof SchemaField>(
+    index: number,
+    key: K,
+    value: SchemaField[K]
+  ): void => {
     const updated = [...fields]
     updated[index][key] = value
     setFields(updated)
   }
 
-  const removeField = (index) => {
+  const removeField = (index: number): void => {
     setFields(fields.filter((_, i) => i !== index))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
     setSaving(true)
     try {
@@ -45,13 +50,13 @@ export default function SchemasPage() {
       setDescription('')
       setFields([{ name: '', type: 'string', description: '', required: true }])
     } catch (err) {
-      alert('Failed to create schema: ' + (err.response?.data?.detail || err.message))
+      alert('Failed to create schema')
     } finally {
       setSaving(false)
     }
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string): Promise<void> => {
     if (!confirm('Delete this schema?')) return
     try {
       await deleteSchema(id)
@@ -123,7 +128,7 @@ export default function SchemasPage() {
                       />
                       <select
                         value={field.type}
-                        onChange={(e) => updateField(index, 'type', e.target.value)}
+                        onChange={(e) => updateField(index, 'type', e.target.value as FieldType)}
                         className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
                       >
                         {FIELD_TYPES.map(t => <option key={t} value={t}>{t}</option>)}

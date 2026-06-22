@@ -1,11 +1,16 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import DashboardPage from './pages/DashboardPage'
 import DocumentsPage from './pages/DocumentsPage'
 import SchemasPage from './pages/SchemasPage'
 
-const ProtectedRoute = ({ children }) => {
+interface ProtectedRouteProps {
+  children: ReactNode
+}
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const token = localStorage.getItem('token')
   if (!token) return <Navigate to="/login" replace />
   return children
