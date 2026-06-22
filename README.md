@@ -17,7 +17,7 @@ Most document extraction tools are built for one document type. DocFlow flips th
 ## Live Demo
 
 <!-- Add once redeplyed -->
-🔗 **[Live app](http://my-ec2-ip)** 
+🔗 **[Live app]** 
 
 ```
 Demo login:
@@ -29,6 +29,8 @@ password: demo1234
 
 ## Architecture
 
+
+```
 ┌─────────────┐      ┌──────────────┐      ┌─────────────────┐
 │   React +   │──────▶   FastAPI    │──────▶   PostgreSQL     │
 │  TypeScript │ HTTP │   Backend    │ ORM  │   (AWS RDS)      │
@@ -38,9 +40,12 @@ password: demo1234
                  ┌───────────┼───────────┐
                  ▼                       ▼
          ┌───────────────┐      ┌───────────────┐
-         │   AWS S3      │      │  Anthropic    │
-         │ (file storage)│      │  Claude API   │
+         │   AWS S3       │      │  Anthropic     │
+         │  (file storage)│      │  Claude API    │
          └───────────────┘      └───────────────┘
+```
+
+
 
 **Request flow for an extraction:**
 
