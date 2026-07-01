@@ -32,16 +32,16 @@ password: demo1234
 
 ```
 ┌─────────────┐      ┌──────────────┐      ┌─────────────────┐
-│   React +   │──────▶   FastAPI    │──────▶   PostgreSQL     │
-│  TypeScript │ HTTP │   Backend    │ ORM  │   (AWS RDS)      │
-│  (Nginx)    │◀─────│              │◀─────│                  │
-└─────────────┘      └──────┬───────┘      └──────────────────┘
+│   React +   │──────▶   FastAPI    │──────▶   PostgreSQL    │
+│  TypeScript │ HTTP │   Backend    │ ORM  │   (AWS RDS)     │
+│  (Nginx)    │◀─────│              │◀─────│                 │
+└─────────────┘      └──────-───────┘      └─────────────────┘
                              │
                  ┌───────────┼───────────┐
                  ▼                       ▼
          ┌───────────────┐      ┌───────────────┐
-         │   AWS S3       │      │  Anthropic     │
-         │  (file storage)│      │  Claude API    │
+         │    AWS S3     │      │  Anthropic    │
+         │ (file storage)│      │  Claude API   │
          └───────────────┘      └───────────────┘
 ```
 
