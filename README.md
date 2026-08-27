@@ -1,3 +1,5 @@
+![docflow](./docflow_ascii_banner.png)
+
 # DocFlow
 
 A configurable document intelligence pipeline that extracts structured data from any document using LLMs — built end-to-end with a typed React frontend, a FastAPI backend, and a production AWS deployment.
