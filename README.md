@@ -27,19 +27,6 @@ Most document extraction tools are built for one document type. DocFlow flips th
 
 ---
 
-## Live Demo
-
-<!-- Add once redeplyed -->
-🔗 **[Live app]** 
-
-```
-Demo login:
-email:    demo@docflow.app
-password: demo1234
-```
-
----
-
 ## Architecture
 
 
